@@ -98,6 +98,7 @@ using BlazorWebAssembly.Shared;
     private void IncrementCount()
     {
         currentCount++;
+            currentCount++;
     }
 
 #line default
