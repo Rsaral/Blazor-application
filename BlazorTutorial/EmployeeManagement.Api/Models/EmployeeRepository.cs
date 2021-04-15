@@ -10,27 +10,10 @@ namespace EmployeeManagement.Api.Models
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext appDbContext;
-    
+
         public EmployeeRepository(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
-        }
-
-        public async Task<IEnumerable<Employee>> GetEmployees()
-        {
-            return await appDbContext.Employees.ToListAsync();
-        }
-
-        public async Task<Employee> GetEmployee(int employeeId)
-        {
-            return await appDbContext.Employees
-                .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
-        }
-
-        public async Task<Employee> GetEmpolyeeByEmail(string email)
-        {
-            return await appDbContext.Employees
-                .FirstOrDefaultAsync(e => e.Email == email);
         }
 
         public async Task<Employee> AddEmployee(Employee employee)
@@ -40,11 +23,56 @@ namespace EmployeeManagement.Api.Models
             return result.Entity;
         }
 
+        public Task AddEmployee(object employee)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Employee> DeleteEmployee(int employeeId)
+        {
+            var result = await appDbContext.Employees
+                .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+            if (result != null)
+            {
+                appDbContext.Employees.Remove(result);
+                await appDbContext.SaveChangesAsync();
+                return result;
+            }
+
+            return null;
+        }
+
+        public async Task<Employee> GetEmployee(int employeeId)
+        {
+            return await appDbContext.Employees
+                .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+        }
+
+        public async Task<Employee> GetEmployeeByEmail(string email)
+        {
+            return await appDbContext.Employees
+                .FirstOrDefaultAsync(e => e.Email == email);
+        }
+
+        public object GetEmployeeByEmail(object email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Employee>> GetEmployees()
+        {
+            return await appDbContext.Employees.ToListAsync();
+        }
+
+        public Task<Employee> GetEmpolyeeByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Employee> UpdateEmployee(Employee employee)
         {
             var result = await appDbContext.Employees
                 .FirstOrDefaultAsync(e => e.EmployeeId == employee.EmployeeId);
-
 
             if (result != null)
             {
@@ -63,31 +91,6 @@ namespace EmployeeManagement.Api.Models
 
             return null;
         }
-
-        public async void DeleteEmployee(int employeeId)
-        {
-            var result = await appDbContext.Employees
-                .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
-            if (result != null)
-            {
-                appDbContext.Employees.Remove(result);
-                await appDbContext.SaveChangesAsync();
-            }
-        }
-
-        public object GetEmployeeByEmail(object email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddEmployee(object employee)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Employee> GetEmployeeByEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
+
