@@ -56,8 +56,7 @@ namespace EmployeeManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Employee>>
-            CreateEmployee([FromBody] Employee employee)
+        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
         {
             try
             {
@@ -66,7 +65,6 @@ namespace EmployeeManagement.Api.Controllers
                     return BadRequest();
                 }
 
-                // Add custom model validation error
                 var emp = employeeRepository.GetEmployeeByEmail(employee.Email);
 
                 if (emp != null)
@@ -83,7 +81,29 @@ namespace EmployeeManagement.Api.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    "Error creating employee");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+        {
+            try
+            {
+                if (id != employee.EmployeeId)
+                    return BadRequest("Employee ID mismatch");
+
+                var employeeToUpdate = await employeeRepository.GetEmployee(id);
+
+                if (employeeToUpdate == null)
+                    return NotFound($"Employee with Id = {id} not found");
+
+                return await employeeRepository.UpdateEmployee(employee);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error updating data");
             }
         }
     }
