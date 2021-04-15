@@ -10,7 +10,7 @@ namespace EmployeeManagement.Api.Models
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext appDbContext;
-
+    
         public EmployeeRepository(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
@@ -27,6 +27,12 @@ namespace EmployeeManagement.Api.Models
                 .FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
         }
 
+        public async Task<Employee> GetEmpolyeeByEmail(string email)
+        {
+            return await appDbContext.Employees
+                .FirstOrDefaultAsync(e => e.Email == email);
+        }
+
         public async Task<Employee> AddEmployee(Employee employee)
         {
             var result = await appDbContext.Employees.AddAsync(employee);
@@ -38,6 +44,7 @@ namespace EmployeeManagement.Api.Models
         {
             var result = await appDbContext.Employees
                 .FirstOrDefaultAsync(e => e.EmployeeId == employee.EmployeeId);
+
 
             if (result != null)
             {
@@ -66,6 +73,21 @@ namespace EmployeeManagement.Api.Models
                 appDbContext.Employees.Remove(result);
                 await appDbContext.SaveChangesAsync();
             }
+        }
+
+        public object GetEmployeeByEmail(object email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddEmployee(object employee)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Employee> GetEmployeeByEmail(string email)
+        {
+            throw new NotImplementedException();
         }
     }
 }

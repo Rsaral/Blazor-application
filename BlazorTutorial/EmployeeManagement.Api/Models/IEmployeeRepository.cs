@@ -1,5 +1,4 @@
 ﻿using EmployeeManagement.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,9 +8,13 @@ namespace EmployeeManagement.Api.Models
     {
         Task<IEnumerable<Employee>> GetEmployees();
         Task<Employee> GetEmployee(int employeeId);
+        Task<Employee> GetEmpolyeeByEmail(string email);
         Task<Employee> AddEmployee(Employee employee);
         Task<Employee> UpdateEmployee(Employee employee);
         void DeleteEmployee(int employeeId);
+        object GetEmployeeByEmail(object email);
+        Task AddEmployee(object employee);
     }
-
 }
+
+
