@@ -1,13 +1,10 @@
 ﻿using EmployeeManagement.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace EmployeeManagement.Api.Models
 {
     public class DepartmentRepository : IDepartmentRepository
-
     {
         private readonly AppDbContext appDbContext;
 
@@ -26,17 +23,5 @@ namespace EmployeeManagement.Api.Models
         {
             return appDbContext.Departments;
         }
-
-        Department IDepartmentRepository.GetDepartment(int departmentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<Department> IDepartmentRepository.GetDepartments()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
-   
-

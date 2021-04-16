@@ -19,10 +19,11 @@ namespace EmployeeManagement.Api.Controllers
         {
             this.employeeRepository = employeeRepository;
         }
+
         [HttpGet("{search}")]
         public async Task<ActionResult<IEnumerable<Employee>>> Search(string name, Gender? gender)
         {
-            try 
+            try
             {
                 var result = await employeeRepository.Search(name, gender);
 
@@ -30,16 +31,15 @@ namespace EmployeeManagement.Api.Controllers
                 {
                     return Ok(result);
                 }
+
                 return NotFound();
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error retrieving data from the database");
+                    "Error retrieving data from the database");
             }
         }
-
 
         [HttpGet]
         public async Task<ActionResult> GetEmployees()
@@ -77,14 +77,13 @@ namespace EmployeeManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+        public async Task<ActionResult<Employee>>
+            CreateEmployee([FromBody] Employee employee)
         {
             try
             {
                 if (employee == null)
-                {
                     return BadRequest();
-                }
 
                 var emp = employeeRepository.GetEmployeeByEmail(employee.Email);
 
@@ -96,32 +95,27 @@ namespace EmployeeManagement.Api.Controllers
 
                 var createdEmployee = await employeeRepository.AddEmployee(employee);
 
-                return CreatedAtAction(nameof(GetEmployee), new { id = createdEmployee.EmployeeId },
-                    createdEmployee);
+                return CreatedAtAction(nameof(GetEmployee),
+                    new { id = createdEmployee.EmployeeId }, createdEmployee);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving data from the database");
+                    "Error creating new employee record");
             }
         }
-
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
         {
             try
             {
                 if (id != employee.EmployeeId)
-                {
                     return BadRequest("Employee ID mismatch");
-                }
 
                 var employeeToUpdate = await employeeRepository.GetEmployee(id);
 
                 if (employeeToUpdate == null)
-                {
                     return NotFound($"Employee with Id = {id} not found");
-                }
 
                 return await employeeRepository.UpdateEmployee(employee);
             }
@@ -131,7 +125,6 @@ namespace EmployeeManagement.Api.Controllers
                     "Error updating data");
             }
         }
-
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Employee>> DeleteEmployee(int id)
         {
